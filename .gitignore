@@ -1,0 +1,14 @@
+venv/
+__pycache__/
+*.pyc
+
+vectorstore/
+models/
+
+.env
+
+*.faiss
+*.pkl
+
+.idea/
+.vscode/
