@@ -1,8 +1,8 @@
-# VaultRAG
+# Offline RAG
 
-**VaultRAG** is a fully private, offline Retrieval-Augmented Generation (RAG) system that allows you to chat with your PDF documents using local AI models.
+**Office RAG** is a fully private, offline Retrieval-Augmented Generation (RAG) system that allows you to chat with your PDF documents using local AI models.
 
-Unlike cloud-based AI systems, VaultRAG keeps all data on your machine. Documents are processed locally, stored in a local vector database, and queried through a local Large Language Model (LLM).
+Unlike cloud-based AI systems, Offline RAG keeps all data on your machine. Documents are processed locally, stored in a local vector database, and queried through a local Large Language Model (LLM).
 
 No OpenAI API.
 No Gemini API.
