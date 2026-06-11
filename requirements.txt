@@ -1,18 +1,36 @@
 langchain
 langchain-community
 langchain-ollama
-
 langchain-huggingface
 
 faiss-cpu
 
 sentence-transformers
 
-pypdf
-
 torch
 transformers
 accelerate
 
+pypdf
+
+python-docx
+
+pandas
+openpyxl
+
 numpy
 tqdm
+
+requests
+
+huggingface-hub
+safetensors
+
+easyocr
+opencv-python
+pillow
+
+pdf2image
+
+beautifulsoup4
+lxml

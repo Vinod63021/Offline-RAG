@@ -1,0 +1,37 @@
+{
+  "name": "Vinod Kumar",
+  "github": "Vinod63021",
+  "projects": [
+    {
+      "name": "VaultRAG",
+      "description": "Private offline RAG system using Ollama, Qwen3, BGE embeddings, and FAISS."
+    },
+    {
+      "name": "Student Portal",
+      "description": "Engineering student portal with attendance tracking, classroom allocation, events, and suggestions."
+    },
+    {
+      "name": "ANPR System",
+      "description": "Automatic Number Plate Recognition using YOLO."
+    },
+    {
+      "name": "Drone Project",
+      "description": "Custom-built drone with future plans for camera integration and hackathon enhancements."
+    }
+  ],
+  "skills": [
+    "Python",
+    "Machine Learning",
+    "RAG",
+    "LangChain",
+    "FAISS",
+    "Firebase",
+    "YOLO",
+    "Computer Vision"
+  ],
+  "hardware": {
+    "ram": "16GB",
+    "gpu": "RTX 3050",
+    "os": "Windows"
+  }
+}

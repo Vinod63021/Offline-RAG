@@ -660,6 +660,303 @@ Planned features:
 
 ---
 
+
+# How to Run the Project
+
+## First-Time Setup
+
+### 1. Clone Repository
+
+```bash
+git clone https://github.com/Vinod63021/Offline-RAG.git
+
+cd Offline-RAG
+```
+
+---
+
+### 2. Create Virtual Environment
+
+```bash
+python -m venv venv
+```
+
+---
+
+### 3. Activate Virtual Environment
+
+Windows:
+
+```bash
+venv\Scripts\activate
+```
+
+Linux:
+
+```bash
+source venv/bin/activate
+```
+
+---
+
+### 4. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+### 5. Install Ollama
+
+Download and install Ollama:
+
+[https://ollama.com](https://ollama.com)
+
+Verify installation:
+
+```bash
+ollama --version
+```
+
+---
+
+### 6. Download Qwen3
+
+```bash
+ollama pull qwen3:8b
+```
+
+Verify:
+
+```bash
+ollama run qwen3:8b
+```
+
+Type:
+
+```text
+Hello
+```
+
+If Qwen responds, the model is installed correctly.
+
+---
+
+### 7. Add PDF Documents
+
+Place all PDF files inside:
+
+```text
+documents/
+```
+
+Example:
+
+```text
+documents/
+├── attendance.pdf
+├── rules.pdf
+└── notes.pdf
+```
+
+---
+
+## Build the Knowledge Base
+
+Run:
+
+```bash
+python ingest.py
+```
+
+This will:
+
+```text
+Load PDFs
+      ↓
+Extract Text
+      ↓
+Split into Chunks
+      ↓
+Generate Embeddings
+      ↓
+Create FAISS Index
+      ↓
+Save Vector Database
+```
+
+Expected Output:
+
+```text
+Loading PDFs...
+Loaded 20 pages
+
+Created 50 chunks
+
+Loading embedding model...
+
+Creating FAISS database...
+
+Vector database created.
+```
+
+After successful execution:
+
+```text
+vectorstore/
+├── index.faiss
+└── index.pkl
+```
+
+will be created automatically.
+
+---
+
+## Start the Chat Assistant
+
+Run:
+
+```bash
+python chat.py
+```
+
+Expected Output:
+
+```text
+Loading embedding model...
+
+Loading vector database...
+
+Loading Qwen...
+
+Offline RAG Ready
+
+Type exit to quit
+```
+
+---
+
+## Example Usage
+
+Ask:
+
+```text
+You: What is the attendance requirement?
+```
+
+Response:
+
+```text
+Assistant:
+The minimum attendance requirement is 75%.
+```
+
+---
+
+Ask:
+
+```text
+You: When do exams start?
+```
+
+Response:
+
+```text
+Assistant:
+The exams start on March 20.
+```
+
+---
+
+## Exit the Assistant
+
+Type:
+
+```text
+exit
+```
+
+and press Enter.
+
+---
+
+# Rebuilding the Database
+
+Whenever new PDFs are added:
+
+```text
+documents/
+```
+
+Run:
+
+```bash
+python ingest.py
+```
+
+again.
+
+This rebuilds the FAISS vector database with the latest documents.
+
+---
+
+# Daily Usage Workflow
+
+### First Time
+
+```bash
+pip install -r requirements.txt
+
+ollama pull qwen3:8b
+
+python ingest.py
+
+python chat.py
+```
+
+---
+
+### After Adding New PDFs
+
+```bash
+python ingest.py
+
+python chat.py
+```
+
+---
+
+### Normal Usage
+
+```bash
+python chat.py
+```
+
+No re-ingestion is required unless documents change.
+
+---
+
+# Offline Operation
+
+After the initial model downloads:
+
+```text
+Qwen3
+BGE Small Embedding Model
+```
+
+the system can run completely offline.
+
+No internet connection is required for:
+
+* PDF processing
+* Embedding generation
+* Vector search
+* Question answering
+
+Everything runs locally on your machine.
+
 # Author
 
 Vinod Kumar

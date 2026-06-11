@@ -1,9 +1,7 @@
 from langchain_community.vectorstores import FAISS
-
-from langchain_ollama import OllamaLLM
+import requests
 
 from model_loader import get_embedding_model
-
 
 VECTORSTORE_PATH = r"C:\Users\vinod\Downloads\offline-rag\vectorstore"
 
@@ -19,14 +17,42 @@ db = FAISS.load_local(
     allow_dangerous_deserialization=True
 )
 
-print("Checking Ollama...")
+print("Checking Ollama API...")
 
-llm = OllamaLLM(
-    model="qwen3:8b"
-)
+try:
+    response = requests.get(
+        "http://localhost:11434/api/tags",
+        timeout=5
+    )
+
+    if response.status_code != 200:
+        raise Exception("Ollama server not reachable")
+
+except Exception as e:
+    print("\nERROR: Ollama is not running")
+    print(e)
+    exit()
 
 print("\nOffline RAG Ready")
 print("Type exit to quit\n")
+
+
+def ask_llm(prompt):
+
+    response = requests.post(
+        "http://localhost:11434/api/generate",
+        json={
+            "model": "qwen3:8b",
+            "prompt": prompt,
+            "stream": False
+        },
+        timeout=300
+    )
+
+    response.raise_for_status()
+
+    return response.json()["response"]
+
 
 while True:
 
@@ -35,22 +61,27 @@ while True:
     if question.lower() == "exit":
         break
 
-    docs = db.similarity_search(
-        question,
-        k=4
-    )
+    try:
 
-    context = "\n\n".join(
-        doc.page_content for doc in docs
-    )
+        docs = db.similarity_search(
+            question,
+            k=2
+        )
 
-    prompt = f"""
+        context = "\n\n".join(
+            doc.page_content[:1000]
+            for doc in docs
+        )
+
+        prompt = f"""
 You are a helpful assistant.
 
-Answer ONLY using the context.
+Use ONLY the information present in the context.
 
-If the answer is not present in the context,
-say you don't know.
+If the answer is not available in the context,
+reply exactly:
+
+I don't know based on the provided documents.
 
 Context:
 {context}
@@ -61,8 +92,14 @@ Question:
 Answer:
 """
 
-    response = llm.invoke(prompt)
+        response = ask_llm(prompt)
 
-    print("\nAssistant:")
-    print(response)
-    print()
+        print("\nAssistant:")
+        print(response)
+        print()
+
+    except Exception as e:
+
+        print("\nERROR:")
+        print(e)
+        print()

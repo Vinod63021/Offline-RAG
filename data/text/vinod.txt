@@ -1,0 +1,72 @@
+
+S.V.S.S Vinod Kumar
+Pre-Final Year (B.Tech)
+Computer Science & Engineering
+at Andhra University
+CGPA: 8.13 till 4th Sem	
+S/O: Sammidi Govinda Rao, 50-90-23/4, Santhipuram, Near municipal School,  Seethamma peta, Visakhapatnam(Urban), Andhra Pradesh - 530016
+Mobile: +91-6302112377
+Email: sammidivinod@gmail.com
+Web: https://vinod63021.github.io/My_Portfolio 
+
+Links
+Github: https://github.com/Vinod63021
+LinkedIn: www.linkedin.com/in/sammidi-venkata-satya-surya-vinod-kumar-a5934a315
+Portfolio: https://vinod63021.github.io/My_Portfolio/
+
+Skills
+Hard Skills:
+OS: Linux, Windows; 
+LANGUAGES: C/C++, Java, Python, Javascript; 
+FRAMEWORK: Flask, Android, Web-development; 
+DATABASES: MySQL;
+OTHERS: Git, Eclipse, Firebase Studio, Blender.
+Soft Skills:
+Team Leadership, Mentoring, Time Management, Communication, Collaboration, Adaptability, Problem Solving.
+
+Coursework
+Data Structures, Algorithm, Data Communication and Computer Networks, Discrete Mathematics, Operating Systems, Databases, Data Analysis
+Education
+2023 – 2027  B.Tech in Computer Science & Engineering, Andhra University
+CGPA: 8.00 / 10 (Expected)
+2021 – 2023  Intermediate, Sri Chaitanya College, Visakhapatnam
+Percentage: 78.4 %
+2011 – 2021  High School, V.T High School, Visakhapatnam
+Percentage: 97.3 %
+
+Experience
+Oct 2025 – Present | GDGoC AUCE - Firebase Lead 
+•	Leading the development and implementation of Firebase solutions for club projects.
+•	Mentoring members on Firebase technologies, including Fire Studio , Authentication, and Cloud Functions.
+•	(Firebase Studio, Authentication, Cloud Functions)
+Jul 2025–Present | IDP EducationLtd Student Ambassador
+•	Representing IDP Education to promote global education opportunities.
+•	Engaging with students to provide guidance on study abroad pathways and events.
+•	(Public Speaking, Student Engagement, Guidance)
+May 2025 – Jul 2025 | Steel Plant Rashtriya Ispat Nigam Limited (RINL) (On-site) – J2EE Technologies
+•	Developed an ETL Management System
+•	Created data-driven solutions to optimize processes and improve system efficiency
+•	(J2EE Technologies(Servlets, Jsp, tomcat, MySql)	
+Achievements/Awards
+Green Spark Ideathon 1.0 — First prize :Competition for sustainability solutions (Ecodharma Project).
+Smart India Hackathon — Consolation: Developed an AI-powered waste management system.
+IT Hackathon — Second Runner-Up: Built an innovative software application under time constraints.
+24-Hour National-level Hackathon — Consolation Prize: Recognized for creativity and problem-solving in a competitive environment.
+Spark Nation Hackathon— Third prize: We created an AI bot that watches children for dangers like hazards risks, alerting parents only when they need to step in.
+
+Activities in Sports
+Competitive Roller Skating (2019 – 2022)
+•	National Level: Represented Andhra Pradesh as a participant in the 65th National School Skating Championship (SGFI) in Belgaum, Karnataka.
+State Level: Secured multiple podium finishes in state-level championships, including:
+•	1st Place, 65th Y.S.R. School Games (Roller Skating).
+•	1st Place (Relay) & 3rd Place (Elimination), 33rd AP Inter-District Championship.
+•	2nd Place (Road-I) & 3rd Place (Rink-II), 31st AP Inter-District Championship.
+District Level: Achieved 15+ medals in Visakhapatnam District Championships (2019~2024), including 5 Gold and 6 Silver medals across various events.
+Key Skills: Demonstrated exceptional discipline, resilience, and time management by balancing a rigorous 15+ hour weekly training schedule with a full-time academic load.
+
+Side Projects
+WiFi Embedded RC Car: ESP8266, Arduino, IoT, Electronics: A smart robotic vehicle controlled over a Wi-Fi network using a smartphone or computer browser, demonstrating how IoT principles can be applied in robotics.
+Live AI Object Detection System: Python, YOLOv8, OpenCV, ESP32-CAM, Arduino: A system that streams live video from an ESP32-CAM over Wi-Fi. A Python script on a computer captures this stream, runs a YOLOv8 model on it for real-time object detection, and displays the annotated video feed in a fullscreen window.
+Student Hub(Vidhyardhi): basically,I am trying to make a website for the students need and requirments like  managing there attendance, classes, and faculty timing. Also providing the materials and pervious year question papers (digital/online)for preparation
+ChildSafetyMonitoringSystem_UsingEsp32WebCam: A privacy-focused AI Guardian Bot using local AI on an ESP32-CAM to proactively monitor children, detect risks like hazards or distress, and alert caregivers only when supervision needed!!
+
