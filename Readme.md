@@ -1,964 +1,611 @@
-# Offline RAG
 
-**Office RAG** is a fully private, offline Retrieval-Augmented Generation (RAG) system that allows you to chat with your PDF documents using local AI models.
+# VaultRAG - Enterprise Offline RAG System
 
-Unlike cloud-based AI systems, Offline RAG keeps all data on your machine. Documents are processed locally, stored in a local vector database, and queried through a local Large Language Model (LLM).
+## Overview
 
-No OpenAI API.
-No Gemini API.
-No Claude API.
-No external vector database.
+VaultRAG is a fully offline Retrieval-Augmented Generation (RAG) system designed to build a private AI knowledge assistant capable of understanding and answering questions from personal and organizational data.
 
-Everything stays on your machine.
+Unlike cloud-based AI systems, VaultRAG runs entirely on local hardware and does not require internet access after the initial model download.
+
+The system supports multiple data formats, OCR, hierarchical chunking, semantic retrieval, reranking, and local LLM inference.
 
 ---
 
-# Features
+# Key Features
 
-* Fully offline AI assistant
-* PDF document ingestion
-* Local embedding generation
-* Semantic search using FAISS
-* Local LLM inference using Ollama
-* Automatic embedding model management
-* Private and secure architecture
-* Zero API costs
-* Easily expandable to OCR, databases, and enterprise systems
+## Fully Offline
+
+* No OpenAI API
+* No cloud dependency
+* Local embeddings
+* Local vector database
+* Local LLM inference
 
 ---
 
-# Architecture
+## Multi-Format Document Support
 
-```text
-                    PDF Documents
-                           │
-                           ▼
-                  Text Extraction
-                           │
-                           ▼
-                       Chunking
-                           │
-                           ▼
-                Embedding Model (BGE)
-                           │
-                           ▼
-                 FAISS Vector Database
-                           │
-                           ▼
-                      Retriever
-                           │
-                           ▼
-                Retrieved Context
-                           │
-                           ▼
-                 Qwen3 via Ollama
-                           │
-                           ▼
-                     Final Answer
-```
+Supported file types:
+
+* PDF
+* Scanned PDF
+* DOCX
+* TXT
+* CSV
+* XLSX
+* JSON
+* SQLite Database (.db)
+* Images (.jpg, .jpeg, .png, .bmp)
+* HTML files
 
 ---
 
-# Tech Stack
+## OCR Support
 
-| Component       | Technology             |
-| --------------- | ---------------------- |
-| Language        | Python                 |
-| LLM Runtime     | Ollama                 |
-| LLM             | Qwen3 8B               |
-| Embeddings      | BAAI/bge-small-en-v1.5 |
-| Vector Database | FAISS                  |
-| Framework       | LangChain              |
-| PDF Extraction  | PyPDF                  |
-| OS              | Windows/Linux          |
+Scanned documents and images are automatically processed using EasyOCR.
+
+Supported:
+
+* Scanned PDFs
+* Screenshots
+* Photos
+* Documents captured from mobile devices
 
 ---
 
-# Folder Structure
+## Hierarchical Chunking
 
-```text
+Instead of splitting documents into random character blocks, VaultRAG preserves document structure.
+
+Example:
+
+Resume
+├── Education
+├── Projects
+├── Skills
+└── Certifications
+
+Each section is stored as a meaningful chunk.
+
+---
+
+## Semantic Embeddings
+
+Embedding Model:
+
+BAAI/bge-base-en-v1.5
+
+Specifications:
+
+* 768 Dimensions
+* High semantic accuracy
+* Optimized for retrieval systems
+* Fully offline
+
+---
+
+## Vector Database
+
+Database:
+
+FAISS
+
+Benefits:
+
+* Fast retrieval
+* Lightweight
+* Local storage
+* No server required
+
+---
+
+## Advanced Retrieval
+
+Pipeline:
+
+Question
+↓
+BGE Base Embedding
+↓
+FAISS Search
+↓
+Top 20 Chunks
+↓
+BGE Reranker
+↓
+Best 5 Chunks
+↓
+Qwen3
+↓
+Answer
+
+---
+
+## Local LLM
+
+Current Model:
+
+Qwen3 8B
+
+Features:
+
+* Excellent reasoning
+* Good retrieval grounding
+* Fast local inference
+* Fully offline
+
+---
+
+# Project Architecture
+
+Documents
+│
+├── PDF
+├── DOCX
+├── XLSX
+├── CSV
+├── TXT
+├── JSON
+├── SQLite
+├── HTML
+├── Images
+└── Scanned PDFs
+│
+▼
+Document Loader
+│
+▼
+Text Extraction
+│
+▼
+OCR (EasyOCR)
+│
+▼
+Hierarchical Chunking
+│
+▼
+BGE Base Embeddings
+│
+▼
+FAISS Vector Database
+│
+▼
+Top 20 Retrieval
+│
+▼
+BGE Reranker
+│
+▼
+Best 5 Chunks
+│
+▼
+Qwen3 8B
+│
+▼
+Answer Generation
+
+---
+
+# Workflow
+
+## Step 1
+
+Place documents inside:
+
+data/
+
+---
+
+## Step 2
+
+Run ingestion:
+
+python ingest.py
+
+This process:
+
+* Loads documents
+* Extracts text
+* Runs OCR
+* Performs hierarchical chunking
+* Generates embeddings
+* Stores vectors in FAISS
+
+---
+
+## Step 3
+
+Launch chat:
+
+python chat.py
+
+---
+
+## Step 4
+
+Ask questions
+
+Examples:
+
+What projects has Vinod worked on?
+
+What is the CGPA mentioned in the resume?
+
+List all students from the database.
+
+Summarize the project report.
+
+---
+
+# How Retrieval Works
+
+Traditional Search:
+
+Question
+↓
+Keyword Match
+↓
+Answer
+
+Problems:
+
+* Misses meaning
+* Sensitive to wording
+
+---
+
+VaultRAG Search:
+
+Question
+↓
+Embedding
+↓
+Vector Search
+↓
+Semantic Similarity
+↓
+Relevant Chunks
+
+Benefits:
+
+* Understands meaning
+* Works with different wording
+* Better recall
+
+---
+
+# What is an Embedding?
+
+Embeddings convert text into numbers.
+
+Example:
+
+"Artificial Intelligence"
+
+↓
+
+[0.23, -0.18, 0.45, ...]
+
+The embedding model places similar concepts near each other in vector space.
+
+Example:
+
+AI
+Machine Learning
+Deep Learning
+
+are closer together than:
+
+AI
+Pizza
+Football
+
+---
+
+# Why BGE Base?
+
+Previous Version:
+
+BGE Small
+
+* 384 Dimensions
+* Smaller
+* Faster
+* Lower retrieval accuracy
+
+Current Version:
+
+BGE Base
+
+* 768 Dimensions
+* Better semantic understanding
+* Higher retrieval quality
+
+Result:
+
+More accurate document retrieval.
+
+---
+
+# What is Hierarchical Chunking?
+
+Old Version:
+
+Document
+↓
+1000 Characters
+↓
+1000 Characters
+
+Problems:
+
+* Breaks context
+* Splits sentences
+* Splits sections
+
+Example:
+
+Education section could be divided across multiple chunks.
+
+---
+
+New Version:
+
+Document
+↓
+Sections
+↓
+Paragraph Groups
+↓
+Chunks
+
+Benefits:
+
+* Preserves meaning
+* Better retrieval
+* Better answers
+
+---
+
+# What is a Reranker?
+
+Most people misunderstand this concept.
+
+FAISS finds chunks that look similar.
+
+Example:
+
+Question:
+
+What is Vinod's educational qualification?
+
+FAISS might return:
+
+* Education
+* Projects
+* Skills
+* Address
+
+because all are related to the person.
+
+---
+
+BGE Reranker reads:
+
+Question + Chunk
+
+and scores relevance.
+
+Example:
+
+Education Chunk
+Score: 0.99
+
+Projects Chunk
+Score: 0.20
+
+Address Chunk
+Score: 0.03
+
+Then only the highest scoring chunks are sent to Qwen.
+
+Result:
+
+More accurate answers.
+
+Less hallucination.
+
+---
+
+# Old Architecture vs New Architecture
+
+## Old Version
+
+PDF
+↓
+Character Chunking
+↓
+BGE Small
+↓
+FAISS
+↓
+Top 4 Chunks
+↓
+Qwen
+
+Limitations:
+
+* Poor chunk quality
+* Lower retrieval accuracy
+* No reranking
+* Limited file support
+
+---
+
+## Current Version
+
+Multi-Format Data
+↓
+OCR
+↓
+Hierarchical Chunking
+↓
+BGE Base
+↓
+FAISS
+↓
+Top 20 Chunks
+↓
+BGE Reranker
+↓
+Best 5 Chunks
+↓
+Qwen3
+
+Advantages:
+
+* Better retrieval
+* Better chunk quality
+* Better semantic understanding
+* Higher answer accuracy
+
+---
+
+# Project Structure
+
 offline-rag/
-│
-├── documents/
-│   ├── attendance.pdf
-│   ├── rules.pdf
-│   └── notes.pdf
-│
+
+├── data/
+
 ├── models/
-│   └── bge-small/
-│
+
+│ ├── bge-base/
+
+│ └── bge-reranker-base/
+
 ├── vectorstore/
-│   ├── index.faiss
-│   └── index.pkl
-│
+
+├── document_loader.py
+
+├── hierarchical_chunker.py
+
 ├── model_loader.py
+
+├── reranker.py
+
 ├── ingest.py
+
 ├── chat.py
+
 ├── requirements.txt
-├── README.md
-│
-└── venv/
-```
 
----
-
-# Hardware Requirements
-
-Minimum:
-
-```text
-RAM: 16 GB
-CPU: Modern Quad-Core
-GPU: Optional
-```
-
-Recommended:
-
-```text
-RAM: 16 GB+
-GPU: RTX 3050 or higher
-Storage: 20 GB+
-```
-
-Tested Target:
-
-```text
-Windows 11
-16 GB RAM
-RTX 3050
-```
+└── README.md
 
 ---
 
 # Installation
 
-## Step 1 - Clone Repository
+## Create Virtual Environment
 
-```bash
-git clone https://github.com/Vinod63021/Offline-RAG.git
-
-cd Offline-RAG
-```
-
----
-
-## Step 2 - Create Virtual Environment
-
-```bash
 python -m venv venv
-```
-
-Activate:
 
 Windows:
 
-```bash
 venv\Scripts\activate
-```
 
 Linux:
 
-```bash
 source venv/bin/activate
-```
 
 ---
 
-## Step 3 - Install Dependencies
+## Install Dependencies
 
-```bash
 pip install -r requirements.txt
-```
 
 ---
 
-# Requirements
+## Download Embedding Model
 
-Example requirements.txt
-
-```text
-langchain
-langchain-community
-langchain-ollama
-
-langchain-huggingface
-
-sentence-transformers
-
-faiss-cpu
-
-pypdf
-
-torch
-transformers
-accelerate
-
-numpy
-tqdm
-```
+python download_embedding.py
 
 ---
 
-# Installing Ollama
+## Download Reranker Model
 
-Download:
+python download_reranker.py
 
-https://ollama.com
+---
+
+## Install Ollama
+
+Download and install Ollama.
+
+Pull model:
+
+ollama pull qwen3:8b
 
 Verify:
 
-```bash
-ollama --version
-```
-
----
-
-# Downloading Qwen3
-
-Download model:
-
-```bash
-ollama pull qwen3:8b
-```
-
-Test:
-
-```bash
 ollama run qwen3:8b
-```
-
-Example:
-
-```text
-What is AI?
-```
-
-If it responds, the local LLM is working.
 
 ---
 
-# Embedding Model
+# Running VaultRAG
 
-VaultRAG uses:
-
-```text
-BAAI/bge-small-en-v1.5
-```
-
-Purpose:
-
-```text
-Convert text into vectors
-```
-
-Used in:
-
-```text
-ingest.py
-chat.py
-```
-
----
-
-# Automatic Model Download
-
-The project contains:
-
-```text
-model_loader.py
-```
-
-Workflow:
-
-```text
-Check Local Model
-        │
-        ▼
-   Exists?
-   │     │
- YES     NO
-  │       │
-  ▼       ▼
- Load   Download
- Model   Model
-  │       │
-  └──► Load
-```
-
-First run:
-
-```text
-Downloads model
-Stores model locally
-```
-
-Later runs:
-
-```text
-Loads local model
-No download required
-```
-
-Storage:
-
-```text
-models/
-└── bge-small/
-```
-
----
-
-# Adding Documents
-
-Place PDFs inside:
-
-```text
-documents/
-```
-
-Example:
-
-```text
-documents/
-├── attendance.pdf
-├── rules.pdf
-└── notes.pdf
-```
-
----
-
-# Building the Knowledge Base
-
-Run:
-
-```bash
-python ingest.py
-```
-
----
-
-# What ingest.py Does
-
-## Step 1
-
-Load PDFs
-
-```text
-documents/
-```
-
-↓
-
-```text
-PyPDFLoader
-```
-
----
-
-## Step 2
-
-Extract text
-
-Example:
-
-```text
-Students must maintain
-75% attendance.
-```
-
----
-
-## Step 3
-
-Chunk documents
-
-Example:
-
-```text
-Chunk 1
-Chunk 2
-Chunk 3
-```
-
-Current settings:
-
-```python
-chunk_size = 1000
-chunk_overlap = 200
-```
-
----
-
-## Step 4
-
-Generate embeddings
-
-```text
-Chunk
- ↓
-BGE Model
- ↓
-Vector
-```
-
-Example:
-
-```text
-[0.23, 0.44, 0.91, ...]
-```
-
----
-
-## Step 5
-
-Store vectors
-
-```text
-FAISS
-```
-
-Output:
-
-```text
-vectorstore/
-├── index.faiss
-└── index.pkl
-```
-
----
-
-# Running the Assistant
-
-Run:
-
-```bash
-python chat.py
-```
-
----
-
-# What chat.py Does
-
-User asks:
-
-```text
-What is the attendance requirement?
-```
-
----
-
-## Step 1
-
-Question converted into embedding
-
-```text
-Question
- ↓
-Vector
-```
-
----
-
-## Step 2
-
-Search FAISS
-
-```text
-Question Vector
- ↓
-Similarity Search
-```
-
----
-
-## Step 3
-
-Retrieve relevant chunks
-
-Example:
-
-```text
-Students must maintain
-75% attendance.
-```
-
----
-
-## Step 4
-
-Build prompt
-
-```text
-Context:
-Students must maintain
-75% attendance.
-
-Question:
-What is attendance requirement?
-```
-
----
-
-## Step 5
-
-Send to Qwen3
-
-```text
-Ollama
- ↓
-Qwen3
-```
-
----
-
-## Step 6
-
-Generate answer
-
-```text
-The minimum attendance
-requirement is 75%.
-```
-
----
-
-# Complete Data Flow
-
-## Ingestion Phase
-
-```text
-PDF
- ↓
-Text Extraction
- ↓
-Chunking
- ↓
-Embeddings
- ↓
-FAISS
-```
-
----
-
-## Query Phase
-
-```text
-Question
- ↓
-Embeddings
- ↓
-FAISS Search
- ↓
-Relevant Chunks
- ↓
-Qwen3
- ↓
-Answer
-```
-
----
-
-# Understanding Each Component
-
-## PDFs
-
-Knowledge source.
-
-Contains information.
-
----
-
-## BGE Small
-
-Embedding model.
-
-Converts:
-
-```text
-Text
-```
-
-into
-
-```text
-Vectors
-```
-
----
-
-## FAISS
-
-Vector search engine.
-
-Stores embeddings.
-
-Performs semantic search.
-
----
-
-## Ollama
-
-Runs AI models locally.
-
----
-
-## Qwen3
-
-The actual AI model.
-
-Responsible for:
-
-* Understanding context
-* Understanding questions
-* Generating answers
-
----
-
-# Security & Privacy
-
-Everything runs locally.
-
-Data never leaves your machine.
-
-No communication with:
-
-* OpenAI
-* Gemini
-* Claude
-* Anthropic
-
-No cloud vector database.
-
-No external APIs.
-
----
-
-# Current Limitations
-
-* Optimized for digital PDFs
-* Scanned PDFs require OCR
-* No source citations yet
-* No chat memory yet
-
----
-
-# Future Roadmap
-
-Planned features:
-
-* OCR support
-* Source citations
-* Conversation memory
-* Streamlit UI
-* React frontend
-* FastAPI backend
-* Hybrid Search (FAISS + BM25)
-* Re-ranking
-* Firebase integration
-* Multi-user support
-* Agentic RAG workflows
-
----
-
-
-# How to Run the Project
-
-## First-Time Setup
-
-### 1. Clone Repository
-
-```bash
-git clone https://github.com/Vinod63021/Offline-RAG.git
-
-cd Offline-RAG
-```
-
----
-
-### 2. Create Virtual Environment
-
-```bash
-python -m venv venv
-```
-
----
-
-### 3. Activate Virtual Environment
-
-Windows:
-
-```bash
-venv\Scripts\activate
-```
-
-Linux:
-
-```bash
-source venv/bin/activate
-```
-
----
-
-### 4. Install Dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
----
-
-### 5. Install Ollama
-
-Download and install Ollama:
-
-[https://ollama.com](https://ollama.com)
-
-Verify installation:
-
-```bash
-ollama --version
-```
-
----
-
-### 6. Download Qwen3
-
-```bash
-ollama pull qwen3:8b
-```
-
-Verify:
-
-```bash
-ollama run qwen3:8b
-```
-
-Type:
-
-```text
-Hello
-```
-
-If Qwen responds, the model is installed correctly.
-
----
-
-### 7. Add PDF Documents
-
-Place all PDF files inside:
-
-```text
-documents/
-```
-
-Example:
-
-```text
-documents/
-├── attendance.pdf
-├── rules.pdf
-└── notes.pdf
-```
-
----
-
-## Build the Knowledge Base
-
-Run:
-
-```bash
-python ingest.py
-```
-
-This will:
-
-```text
-Load PDFs
-      ↓
-Extract Text
-      ↓
-Split into Chunks
-      ↓
-Generate Embeddings
-      ↓
-Create FAISS Index
-      ↓
-Save Vector Database
-```
-
-Expected Output:
-
-```text
-Loading PDFs...
-Loaded 20 pages
-
-Created 50 chunks
-
-Loading embedding model...
-
-Creating FAISS database...
-
-Vector database created.
-```
-
-After successful execution:
-
-```text
-vectorstore/
-├── index.faiss
-└── index.pkl
-```
-
-will be created automatically.
-
----
-
-## Start the Chat Assistant
-
-Run:
-
-```bash
-python chat.py
-```
-
-Expected Output:
-
-```text
-Loading embedding model...
-
-Loading vector database...
-
-Loading Qwen...
-
-Offline RAG Ready
-
-Type exit to quit
-```
-
----
-
-## Example Usage
-
-Ask:
-
-```text
-You: What is the attendance requirement?
-```
-
-Response:
-
-```text
-Assistant:
-The minimum attendance requirement is 75%.
-```
-
----
-
-Ask:
-
-```text
-You: When do exams start?
-```
-
-Response:
-
-```text
-Assistant:
-The exams start on March 20.
-```
-
----
-
-## Exit the Assistant
-
-Type:
-
-```text
-exit
-```
-
-and press Enter.
-
----
-
-# Rebuilding the Database
-
-Whenever new PDFs are added:
-
-```text
-documents/
-```
-
-Run:
-
-```bash
-python ingest.py
-```
-
-again.
-
-This rebuilds the FAISS vector database with the latest documents.
-
----
-
-# Daily Usage Workflow
-
-### First Time
-
-```bash
-pip install -r requirements.txt
-
-ollama pull qwen3:8b
+## Build Vector Database
 
 python ingest.py
 
-python chat.py
-```
+---
+
+## Start Ollama
+
+ollama serve
 
 ---
 
-### After Adding New PDFs
-
-```bash
-python ingest.py
+## Launch Assistant
 
 python chat.py
-```
 
 ---
 
-### Normal Usage
+# Current Status
 
-```bash
-python chat.py
-```
+Completed:
 
-No re-ingestion is required unless documents change.
+* Multi-format ingestion
+* OCR
+* Hierarchical chunking
+* BGE Base embeddings
+* FAISS vector search
+* BGE reranking
+* Qwen3 integration
+* Offline operation
 
 ---
 
-# Offline Operation
+# Planned Upgrades
 
-After the initial model downloads:
+* Hybrid Search (BM25 + FAISS)
+* Metadata Filtering
+* Conversation Memory
+* Incremental Indexing
+* Source Grounding
+* Qdrant Support
+* Multi-user Knowledge Vaults
 
-```text
-Qwen3
-BGE Small Embedding Model
-```
+---
 
-the system can run completely offline.
+# License
 
-No internet connection is required for:
+MIT License
 
-* PDF processing
-* Embedding generation
-* Vector search
-* Question answering
-
-Everything runs locally on your machine.
+---
 
 # Author
 
 Vinod Kumar
 
-Building secure, private, and offline AI systems.
+VaultRAG is a personal project focused on building an enterprise-grade fully offline AI knowledge assistant.
