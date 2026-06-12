@@ -3,11 +3,14 @@ import shutil
 import time
 import json
 
-from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 
 from model_loader import get_embedding_model
 from document_loader import load_all_documents
+
+from hierarchical_chunker import (
+    hierarchical_chunk_documents
+)
 
 
 # ==========================================
@@ -18,8 +21,7 @@ DATA_PATH = r"C:\Users\vinod\Downloads\offline-rag\data"
 
 VECTORSTORE_PATH = r"C:\Users\vinod\Downloads\offline-rag\vectorstore"
 
-CHUNK_SIZE = 1000
-CHUNK_OVERLAP = 200
+MAX_CHUNK_SIZE = 1200
 
 
 # ==========================================
@@ -37,20 +39,26 @@ print("\n===================================")
 print("Loading Documents...")
 print("===================================\n")
 
-documents = load_all_documents(DATA_PATH)
+documents = load_all_documents(
+    DATA_PATH
+)
 
-print(f"\nTotal documents loaded: {len(documents)}")
+print(
+    f"\nTotal documents loaded: {len(documents)}"
+)
 
 if not documents:
 
     print("\nNo documents found.")
-    print(f"Checked folder: {DATA_PATH}")
+    print(
+        f"Checked folder: {DATA_PATH}"
+    )
 
     exit()
 
 
 # ==========================================
-# DOCUMENT STATISTICS
+# DOCUMENT STATS
 # ==========================================
 
 print("\n===================================")
@@ -78,38 +86,34 @@ for key, value in stats.items():
 
 
 # ==========================================
-# CHUNKING
+# HIERARCHICAL CHUNKING
 # ==========================================
 
 print("\n===================================")
-print("Chunking Documents...")
+print("Hierarchical Chunking Documents...")
 print("===================================\n")
 
-splitter = RecursiveCharacterTextSplitter(
-    chunk_size=CHUNK_SIZE,
-    chunk_overlap=CHUNK_OVERLAP,
-    separators=[
-        "\n\n",
-        "\n",
-        ". ",
-        " ",
-        ""
-    ]
+chunks = hierarchical_chunk_documents(
+    documents,
+    max_chunk_size=MAX_CHUNK_SIZE
 )
 
-chunks = splitter.split_documents(
-    documents
-)
-
-# Remove empty chunks
 chunks = [
+
     chunk
+
     for chunk in chunks
+
     if chunk.page_content.strip()
 ]
 
-# Remove duplicate chunks
+
+# ==========================================
+# REMOVE DUPLICATES
+# ==========================================
+
 seen = set()
+
 unique_chunks = []
 
 for chunk in chunks:
@@ -124,17 +128,35 @@ for chunk in chunks:
 
 chunks = unique_chunks
 
-print(f"Created {len(chunks)} chunks")
+
+print(
+    f"Created {len(chunks)} chunks"
+)
+
+total_chars = sum(
+    len(chunk.page_content)
+    for chunk in chunks
+)
+
+avg_chunk_size = (
+    total_chars / len(chunks)
+)
+
+print(
+    f"Average Chunk Size : {avg_chunk_size:.2f}"
+)
 
 if len(chunks) == 0:
 
-    print("\nNo valid chunks created.")
+    print(
+        "\nNo valid chunks created."
+    )
 
     exit()
 
 
 # ==========================================
-# EMBEDDINGS
+# EMBEDDING MODEL
 # ==========================================
 
 print("\n===================================")
@@ -143,7 +165,9 @@ print("===================================\n")
 
 try:
 
-    embeddings = get_embedding_model()
+    embeddings = (
+        get_embedding_model()
+    )
 
 except Exception as e:
 
@@ -157,7 +181,7 @@ except Exception as e:
 
 
 # ==========================================
-# RESET VECTORSTORE
+# REMOVE OLD VECTORSTORE
 # ==========================================
 
 if os.path.exists(
@@ -174,7 +198,7 @@ if os.path.exists(
 
 
 # ==========================================
-# CREATE FAISS
+# CREATE FAISS INDEX
 # ==========================================
 
 print("\n===================================")
@@ -218,24 +242,30 @@ print(
 
 
 # ==========================================
-# SAVE INGESTION INFO
+# SAVE METADATA
 # ==========================================
 
 metadata = {
 
-    "documents_loaded": len(
-        documents
-    ),
+    "chunking_method":
+        "Hierarchical Chunking",
 
-    "chunks_created": len(
-        chunks
-    ),
+    "chunk_size_limit":
+        MAX_CHUNK_SIZE,
 
-    "document_types": stats,
+    "documents_loaded":
+        len(documents),
 
-    "created_at": time.strftime(
-        "%Y-%m-%d %H:%M:%S"
-    )
+    "chunks_created":
+        len(chunks),
+
+    "document_types":
+        stats,
+
+    "created_at":
+        time.strftime(
+            "%Y-%m-%d %H:%M:%S"
+        )
 }
 
 with open(
@@ -265,8 +295,11 @@ with open(
 try:
 
     test_db = FAISS.load_local(
+
         VECTORSTORE_PATH,
+
         embeddings,
+
         allow_dangerous_deserialization=True
     )
 
@@ -312,4 +345,6 @@ print(
     f"Ingestion Time   : {elapsed} sec"
 )
 
-print("\nReady for chat.py\n")
+print(
+    "\nReady for chat\n"
+)
