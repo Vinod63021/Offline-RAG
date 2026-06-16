@@ -1,5 +1,5 @@
 
-# VaultRAG - Enterprise Offline RAG System
+# OfflineRAG - Enterprise Offline RAG System
 
 ## Overview
 
